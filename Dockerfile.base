@@ -48,11 +48,18 @@ RUN echo en_US.UTF-8 UTF-8 >> /etc/locale.gen \
     python3-venv \
     python3 \
     dumb-init \
-    nodejs \
     rsync \
     libpq-dev \
     gosu \
     pkg-config \
+  && curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash \
+  && export NVM_DIR="$HOME/.nvm" \
+  && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" \
+  && [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" \
+  && nvm install v18.19.0 && nvm use v18.19.0 \
+  && ln -s /root/.nvm/versions/node/v18.19.0/bin/node /bin/node \
+  && ln -s /root/.nvm/versions/node/v18.19.0/bin/npm /bin/npm \
+  && ln -s /root/.nvm/versions/node/v18.19.0/bin/npx /bin/npx \
   && DPKG_ARCH="$(dpkg --print-architecture)" \
   && LSB_RELEASE_CODENAME="$(lsb_release --codename | cut -f2)" \
   && sed -e 's/Defaults.*env_reset/Defaults env_keep = "HTTP_PROXY HTTPS_PROXY NO_PROXY FTP_PROXY http_proxy https_proxy no_proxy ftp_proxy"/' -i /etc/sudoers \
